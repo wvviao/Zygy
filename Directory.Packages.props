@@ -22,10 +22,12 @@
     <PackageVersion Include="Polly.Extensions" Version="8.6.5" />
     <PackageVersion Include="ZiggyCreatures.FusionCache" Version="2.5.0" />
     <PackageVersion Include="ZiggyCreatures.FusionCache.OpenTelemetry" Version="2.5.0" />
+    <PackageVersion Include="ZiggyCreatures.FusionCache.Backplane.StackExchangeRedis" Version="2.5.0" />
+    <PackageVersion Include="ZiggyCreatures.FusionCache.Serialization.SystemTextJson" Version="2.5.0" />
     <PackageVersion Include="Scalar.AspNetCore" Version="2.12.50" />
     <PackageVersion Include="idunno.Authentication.Basic" Version="2.4.0" />
-    <PackageVersion Include="Dapper" Version="2.1.66" />
-    <PackageVersion Include="Dapper.AOT" Version="1.0.48" />
+    <PackageVersion Include="linq2db" Version="6.1.0" />
+    <PackageVersion Include="linq2db.Extensions" Version="6.1.0" />
   </ItemGroup>
 
   <ItemGroup>
