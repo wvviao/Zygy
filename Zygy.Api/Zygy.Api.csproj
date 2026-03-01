@@ -16,6 +16,8 @@
     <PackageReference Include="linq2db" />
     <PackageReference Include="linq2db.Extensions" />
     <PackageReference Include="Npgsql" />
+    <PackageReference Include="AWSSDK.S3" />
+    <PackageReference Include="AWSSDK.Extensions.NETCore.Setup" />
   </ItemGroup>
 
   <ItemGroup>

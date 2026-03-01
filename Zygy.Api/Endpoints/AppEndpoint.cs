@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Runtime.InteropServices;
+using Amazon.S3;
 using LinqToDB.Data;
 using Microsoft.AspNetCore.Mvc;
 using ZiggyCreatures.Caching.Fusion;
@@ -10,7 +11,7 @@ using Zygy.Api.Utilities;
 namespace Zygy.Api.Endpoints;
 
 [RegisterSingleton<IEndpoint, AppEndpoint>(Duplicate = DuplicateStrategy.Append)]
-public class AppEndpoint(IFusionCache cache) : IEndpoint
+public class AppEndpoint(IFusionCache cache, IAmazonS3 s3Client, IConfiguration config) : IEndpoint
 {
     public void AddRoutes(IEndpointRouteBuilder self)
     {
@@ -41,6 +42,7 @@ public class AppEndpoint(IFusionCache cache) : IEndpoint
     {
         var values = await db.QueryToListAsync<int>("select 1", ct);
         await cache.SetAsync("test", values, TimeSpan.FromMinutes(5), token: ct);
+        await s3Client.GetObjectAsync(config.GetRequiredValue("S3:DefaultBucket"), "G_zknqqW0AIuP1U.jpg", ct);
         return ApiResponse.Success(values.FirstOrDefault(2) + "");
     }
 }

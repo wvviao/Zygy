@@ -28,6 +28,8 @@
     <PackageVersion Include="idunno.Authentication.Basic" Version="2.4.0" />
     <PackageVersion Include="linq2db" Version="6.1.0" />
     <PackageVersion Include="linq2db.Extensions" Version="6.1.0" />
+    <PackageVersion Include="AWSSDK.S3" Version="4.0.18.7" />
+    <PackageVersion Include="AWSSDK.Extensions.NETCore.Setup" Version="4.0.3.23" />
   </ItemGroup>
 
   <ItemGroup>

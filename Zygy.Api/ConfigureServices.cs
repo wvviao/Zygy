@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using Amazon.S3;
 using LinqToDB;
 using LinqToDB.Extensions.DependencyInjection;
 using LinqToDB.Extensions.Logging;
@@ -19,6 +20,7 @@ internal static class ConfigureServices
             self.AddValidation();
             self.ConfigureOpenApi(env);
             self.ConfigureDbContext(config);
+            self.ConfigureS3(config);
             self.AddAppServices();
         }
 
@@ -57,6 +59,12 @@ internal static class ConfigureServices
                 .AddFusionCacheSystemTextJsonSerializer()
                 .AddFusionCache()
                 .WithRegisteredDistributedCache();
+        }
+
+        private void ConfigureS3(IConfiguration config)
+        {
+            self.AddDefaultAWSOptions(config.GetAWSOptions());
+            self.AddAWSService<IAmazonS3>();
         }
     }
 }
