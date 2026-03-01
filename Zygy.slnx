@@ -1,0 +1,12 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path=".editorconfig" />
+    <File Path="Directory.Build.props" />
+    <File Path="Directory.Packages.props" />
+    <File Path=".gitignore" />
+    <File Path=".gitattributes" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="Zygy.Api/Zygy.Api.csproj" />
+  </Folder>
+</Solution>

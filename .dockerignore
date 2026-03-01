@@ -1,0 +1,13 @@
+﻿**/bin/
+**/obj/
+
+.git
+.gitignore
+.gitattributes
+.github
+
+*.md
+.editorconfig
+
+docs
+**/appsettings*.json

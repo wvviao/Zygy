@@ -1,0 +1,26 @@
+# Schema: http://EditorConfig.org
+# Docs: https://docs.microsoft.com/en-us/visualstudio/ide/editorconfig-code-style-settings-reference
+
+# top-most EditorConfig file
+root = true
+
+[*]
+indent_size = 2
+indent_style = space
+tab_width = 4
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+charset = utf-8
+
+[*.cs]
+indent_size = 4
+
+[*.sln]
+indent_style = tab
+
+[*.bat]
+end_of_line = crlf
+
+[*.{cs,razor}]
+resharper_place_attribute_on_same_line = false
