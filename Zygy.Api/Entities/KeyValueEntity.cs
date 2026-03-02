@@ -2,7 +2,7 @@
 
 namespace Zygy.Api.Entities;
 
-[Table("t_kv_1")]
+[Table("t_kv")]
 public class KeyValueEntity
 {
     [PrimaryKey]
