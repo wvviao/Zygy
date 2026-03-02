@@ -13,6 +13,8 @@ using Microsoft.OpenApi;
 using ZiggyCreatures.Caching.Fusion;
 using ZiggyCreatures.Caching.Fusion.Backplane.StackExchangeRedis;
 using Zygy.Api.Repositories;
+using Zygy.Api.Services;
+using Zygy.Api.Services.Implementations;
 using Zygy.Api.Utilities;
 
 namespace Zygy.Api;
@@ -30,6 +32,7 @@ internal static class ConfigureServices
             self.ConfigureOpenApi(env);
             self.ConfigureDbContext(config);
             self.ConfigureS3(config);
+            self.ConfigureAes(config);
             self.AddAppServices();
         }
 
@@ -181,6 +184,12 @@ internal static class ConfigureServices
                     }
                 };
             });
+        }
+
+        private void ConfigureAes(IConfiguration config)
+        {
+            var key = config.GetRequiredValue("Aes:Key");
+            self.AddSingleton<IEncryptionService>(new AesEncryptionService(Convert.FromBase64String(key)));
         }
     }
 }

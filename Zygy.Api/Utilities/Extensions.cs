@@ -1,4 +1,6 @@
-﻿using Zygy.Api.Models.Responses;
+﻿using System.Diagnostics;
+using System.Security.Claims;
+using Zygy.Api.Models.Responses;
 
 namespace Zygy.Api.Utilities;
 
@@ -32,6 +34,19 @@ public static class Extensions
             return string.IsNullOrWhiteSpace(value)
                 ? throw new ArgumentNullException(key, $"Value for {key} is missing.")
                 : value;
+        }
+    }
+
+    extension(ClaimsPrincipal self)
+    {
+        public string UserId
+        {
+            get
+            {
+                var value = self.FindFirstValue(ClaimTypes.NameIdentifier) ?? self.FindFirstValue("sub");
+                Debug.Assert(value is not null);
+                return value;
+            }
         }
     }
 }
