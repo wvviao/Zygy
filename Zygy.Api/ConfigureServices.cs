@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
 using ZiggyCreatures.Caching.Fusion;
+using ZiggyCreatures.Caching.Fusion.Backplane.StackExchangeRedis;
 using Zygy.Api.Repositories;
 using Zygy.Api.Utilities;
 
@@ -101,7 +102,11 @@ internal static class ConfigureServices
                 .AddStackExchangeRedisCache(options => { options.Configuration = connStr; })
                 .AddFusionCacheSystemTextJsonSerializer()
                 .AddFusionCache()
-                .WithRegisteredDistributedCache();
+                .WithRegisteredDistributedCache()
+                .WithBackplane(new RedisBackplane(new RedisBackplaneOptions
+                {
+                    Configuration = connStr
+                }));
         }
 
         private void ConfigureS3(IConfiguration config)
