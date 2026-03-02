@@ -9,5 +9,6 @@ create table public.t_kv
   created_date timestamp with time zone not null,
   updated_by   TEXT,
   updated_date timestamp with time zone,
+  enabled      boolean default true,
   unique ("group", "key")
 );
