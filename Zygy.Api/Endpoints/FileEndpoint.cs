@@ -1,6 +1,5 @@
 ﻿using Amazon.S3;
 using Amazon.S3.Model;
-using Microsoft.AspNetCore.Mvc;
 using Zygy.Api.Models.Responses;
 using Zygy.Api.Utilities;
 
@@ -19,10 +18,19 @@ public class FileEndpoint(IAmazonS3 s3Client, IConfiguration config) : IEndpoint
     }
 
     [EndpointSummary("上传")]
-    public async ValueTask<Ok<ApiResponse<string>>> Upload([FromForm] IFormFile file, CancellationToken ct)
+    public async ValueTask<Results<
+        Ok<ApiResponse<string>>,
+        BadRequest
+    >> Upload([FromForm] IFormFile file, CancellationToken ct)
     {
+        var ext = Path.GetExtension(file.FileName);
+        if (string.IsNullOrEmpty(ext))
+        {
+            return TypedResults.BadRequest();
+        }
+
         await using var stream = file.OpenReadStream();
-        var fileId = file.FileName;
+        var fileId = Guid.CreateVersion7().EncodeBase32() + ext.ToLowerInvariant();
         var req = new PutObjectRequest
         {
             BucketName = _defaultBucket,

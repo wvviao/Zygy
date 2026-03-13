@@ -124,7 +124,7 @@ internal static class ConfigureServices
 
         private void ConfigureAuth(IConfiguration config, IWebHostEnvironment env)
         {
-            var builder = self.AddAuthorization(options =>
+            self.AddAuthorization(options =>
             {
                 options.AddPolicy(ReadSysPolicy, policy => policy.RequireClaim("permissions", ReadSysPolicy));
                 options.AddPolicy(WriteSysPolicy, policy => policy.RequireClaim("permissions", WriteSysPolicy));
@@ -136,24 +136,16 @@ internal static class ConfigureServices
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            });
-            if (env.IsDevelopment())
+            }).AddJwtBearer(options =>
             {
-                builder.AddJwtBearer();
-            }
-            else
-            {
-                builder.AddJwtBearer(options =>
+                options.IncludeErrorDetails = false;
+                options.Authority = config.GetRequiredValue("Auth0:Authority");
+                options.Audience = config.GetRequiredValue("Auth0:Audience");
+                options.TokenValidationParameters = new TokenValidationParameters
                 {
-                    options.IncludeErrorDetails = false;
-                    options.Authority = config.GetRequiredValue("Auth0:Authority");
-                    options.Audience = config.GetRequiredValue("Auth0:Audience");
-                    options.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        NameClaimType = ClaimTypes.NameIdentifier
-                    };
-                });
-            }
+                    NameClaimType = ClaimTypes.NameIdentifier
+                };
+            });
 
             var username = config.GetRequiredValue("BasicAuth:Username");
             var password = config.GetRequiredValue("BasicAuth:Password");

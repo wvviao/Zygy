@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Security.Claims;
+using SimpleBase;
 using Zygy.Api.Models.Responses;
 
 namespace Zygy.Api.Utilities;
@@ -48,5 +49,11 @@ public static class Extensions
                 return value;
             }
         }
+    }
+
+    extension(Guid self)
+    {
+        public string EncodeBase32() =>
+            Base32.Crockford.Encode(self.ToByteArray()).ToLowerInvariant();
     }
 }

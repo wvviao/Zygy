@@ -30,6 +30,7 @@
     <PackageVersion Include="linq2db.Extensions" Version="6.1.0" />
     <PackageVersion Include="AWSSDK.S3" Version="4.0.18.7" />
     <PackageVersion Include="AWSSDK.Extensions.NETCore.Setup" Version="4.0.3.23" />
+    <PackageVersion Include="SimpleBase" Version="5.6.0" />
   </ItemGroup>
 
   <ItemGroup>
