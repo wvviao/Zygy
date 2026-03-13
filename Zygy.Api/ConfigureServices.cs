@@ -146,21 +146,23 @@ internal static class ConfigureServices
                     NameClaimType = ClaimTypes.NameIdentifier
                 };
             });
-
-            var username = config.GetRequiredValue("BasicAuth:Username");
-            var password = config.GetRequiredValue("BasicAuth:Password");
             self.AddAuthentication(BasicAuthenticationDefaults.AuthenticationScheme).AddBasic(options =>
             {
                 options.AllowInsecureProtocol = true;
                 options.Realm = "Zygy API";
                 options.Events = new BasicAuthenticationEvents
                 {
-                    OnValidateCredentials = ctx =>
+                    OnValidateCredentials = async ctx =>
                     {
-                        if (ctx.Username != username || ctx.Password != password)
+                        var kvRepo = ctx.HttpContext.RequestServices.GetRequiredService<IKeyValueRepository>();
+                        var value = await kvRepo.GetValueAsync(
+                            group: "basic_auth",
+                            key: ctx.Username,
+                            ct: ctx.HttpContext.RequestAborted);
+                        if (string.IsNullOrEmpty(value) || ctx.Password != value)
                         {
                             ctx.Fail("Invalid username or password.");
-                            return Task.CompletedTask;
+                            return;
                         }
 
                         var claims = new[]
@@ -172,7 +174,6 @@ internal static class ConfigureServices
                         };
                         ctx.Principal = new ClaimsPrincipal(new ClaimsIdentity(claims, ctx.Scheme.Name));
                         ctx.Success();
-                        return Task.CompletedTask;
                     }
                 };
             });
