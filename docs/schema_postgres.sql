@@ -12,3 +12,12 @@ create table public.t_kv
   enabled      boolean default true,
   unique ("group", "key")
 );
+
+CREATE TABLE public.t_files
+(
+  id           UUID PRIMARY KEY,
+  filename     text NOT NULL,
+  mime_type    text NOT NULL,
+  etag         text not null,
+  created_date TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
