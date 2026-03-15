@@ -1,7 +1,9 @@
-﻿using System.Net;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Net;
 using Amazon.S3;
 using Amazon.S3.Model;
 using LinqToDB;
+using LinqToDB.Async;
 using Microsoft.Net.Http.Headers;
 using SimpleBase;
 using Zygy.Api.Entities;
@@ -21,6 +23,28 @@ public class FileEndpoint(IAmazonS3 s3Client, IConfiguration config) : IEndpoint
         var builder = app.MapGroup("").WithTags("文件");
         builder.MapGet("/i/{id}", Download);
         builder.MapPost("/files/upload", Upload).RequireAuthorization(WriteSysPolicy).DisableAntiforgery();
+        builder.MapGet("/files", Query).RequireAuthorization(ReadSysPolicy);
+    }
+
+    [EndpointSummary("查询")]
+    public async ValueTask<Ok<PageResponse<QueryFileResponse>>> Query(
+        [FromServices] AppDbContext db,
+        [FromQuery, Range(1, int.MaxValue)] int page = 1,
+        [FromQuery(Name = "per_page"), Range(1, 100)]
+        int perPage = 10,
+        CancellationToken ct = default)
+    {
+        IQueryable<FileEntity> q = db.Files;
+        var data = await q.OrderByDescending(e => e.Id)
+            .Pagination(page, perPage)
+            .ToListAsync(ct);
+        var total = await q.CountAsync(ct);
+        return PageResponse.Success(data.Select(e =>
+        {
+            var id = e.Id!.Value;
+            var ext = Path.GetExtension(e.Filename);
+            return new QueryFileResponse(Id: id, Key: id.EncodeBase32() + ext.ToLowerInvariant(), Filename: e.Filename);
+        }).ToList(), total);
     }
 
     [EndpointSummary("上传")]
