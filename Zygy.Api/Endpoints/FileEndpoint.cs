@@ -43,7 +43,10 @@ public class FileEndpoint(IAmazonS3 s3Client, IConfiguration config) : IEndpoint
         {
             var id = e.Id!.Value;
             var ext = Path.GetExtension(e.Filename);
-            return new QueryFileResponse(Id: id, Key: id.EncodeBase32() + ext.ToLowerInvariant(), Filename: e.Filename);
+            return new QueryFileResponse(
+                Id: id,
+                Path: id.EncodeBase32() + ext.ToLowerInvariant(),
+                Filename: e.Filename);
         }).ToList(), total);
     }
 
