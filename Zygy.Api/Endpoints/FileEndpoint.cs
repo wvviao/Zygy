@@ -21,7 +21,7 @@ public class FileEndpoint(IAmazonS3 s3Client, IConfiguration config) : IEndpoint
     public void AddRoutes(IEndpointRouteBuilder app)
     {
         var builder = app.MapGroup("").WithTags("文件");
-        builder.MapGet("/i/{id}", Download);
+        builder.MapGet("/files/{id}", Download);
         builder.MapPost("/files/upload", Upload).RequireAuthorization(WriteSysPolicy).DisableAntiforgery();
         builder.MapGet("/files", Query).RequireAuthorization(ReadSysPolicy);
     }
